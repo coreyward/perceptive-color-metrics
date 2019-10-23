@@ -60,9 +60,22 @@ export const hexToRgb = (hex, alpha) => {
     : `rgb(${r}, ${g}, ${b})`
 }
 
-export const perceptiveLuminance = rgb => {
+export const bt601Luminance = rgb => {
   const [r, g, b] = normalizeRgb(rgb)
   return 1 - (0.299 * r + 0.587 * g + 0.114 * b) / 255
+}
+
+export const bt709Luminance = rgb => {
+  const [r, g, b] = linearizeRgb(rgb)
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b
+}
+
+export const wcagContrastRatio = (rgbA, rgbB) =>
+  contrastRatio(bt709Luminance(rgbA), bt709Luminance(rgbB))
+
+export const contrastRatio = (lumA, lumB) => {
+  const [dark, light] = [lumA, lumB].sort()
+  return (light + 0.05) / (dark + 0.05)
 }
 
 export const deltaE = (rgbA, rgbB) => {
@@ -104,18 +117,11 @@ export const rgbToLab = rgb => {
   return [116 * y - 16, 500 * (x - y), 200 * (y - z)]
 }
 
-export const linearizeRgb = rgb => {
-  const [r, g, b] = normalizeRgb(rgb).map(value =>
+export const linearizeRgb = rgb =>
+  normalizeRgb(rgb).map(value =>
     value <= 10.0164
       ? value / 3294.6
       : Math.pow((value / 255 + 0.055) / 1.055, 2.4)
   )
-  return 0.2126 * r + 0.7152 * g + 0.0722 * b
-}
-
-export const wcagContrastRatio = (rgbA, rgbB) => {
-  const [dark, light] = [linearizeRgb(rgbA), linearizeRgb(rgbB)].sort()
-  return (light + 0.05) / (dark + 0.05)
-}
 
 const clamp = (val, min, max) => Math.min(Math.max(min, val), max)

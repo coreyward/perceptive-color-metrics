@@ -1,13 +1,6 @@
 import React from "react"
 import PropTypes from "prop-types"
-import {
-  deltaE,
-  wcagContrastRatio,
-  perceptiveLuminance,
-} from "lib/colorFunctions"
-
-const perceptiveDelta = (a, b) =>
-  Math.round(Math.abs(perceptiveLuminance(a) - perceptiveLuminance(b)) * 100)
+import { deltaE as computeDeltaE, wcagContrastRatio } from "lib/colorFunctions"
 
 const ContrastTest = ({ background, text }) => (
   <div css={{ marginBottom: 20 }}>
@@ -51,48 +44,77 @@ const ContrastSwatch = ({ background, text, className }) => (
       Example
     </div>
 
-    <Metrics
-      deltaE={Math.floor(deltaE(background, text))}
-      plDelta={perceptiveDelta(background, text)}
-      contrast={Math.floor(wcagContrastRatio(background, text) * 100) / 100}
-    />
-  </div>
-)
-const Metrics = ({ deltaE, plDelta, contrast }) => (
-  <div
-    css={{
-      display: "grid",
-      gridTemplateColumns: "repeat(3, 130px)",
-      marginLeft: 20,
-    }}
-  >
-    <Metric label="CR">{contrast} : 1</Metric>
-    <Metric label="∆E*">{deltaE}%</Metric>
-    <Metric label="PL∆">{plDelta}%</Metric>
+    <Metrics a={background} b={text} />
   </div>
 )
 
-const Metric = ({ label, children }) => (
+const Metrics = ({ a, b }) => {
+  const contrast = Math.floor(wcagContrastRatio(a, b) * 100) / 100
+  const deltaE = Math.floor(computeDeltaE(a, b))
+
+  return (
+    <div
+      css={{
+        display: "grid",
+        gridTemplateColumns: "repeat(5, 130px)",
+        justifyItems: "center",
+        marginLeft: 20,
+      }}
+    >
+      <Metric label="W3C Ratio" satisfied={contrast >= 4.5}>
+        {contrast} : 1
+      </Metric>
+      <Metric label="CIE ∆E*" satisfied={deltaE > 50}>
+        {deltaE}%
+      </Metric>
+    </div>
+  )
+}
+
+const Metric = ({ label, satisfied, children }) => (
   <div
     css={{
+      display: "flex",
+      alignItems: "center",
       textAlign: "center",
-      marginLeft: 20,
       fontFeatureSettings: "'case' 1, 'ss01' 1",
     }}
   >
-    <div>{children}</div>
-    <Label>{label}</Label>
+    <div css={{ width: 16, marginRight: 8 }}>
+      {satisfied ? <PassIcon /> : <FailIcon />}
+    </div>
+    <div>
+      <div>{children}</div>
+      <Label>{label}</Label>
+    </div>
   </div>
 )
 
 const Label = props => (
   <div
     css={{
-      fontSize: 13,
+      fontSize: 11,
       color: "#7E7E7E",
+      textTransform: "uppercase",
       letterSpacing: "0.06em",
       marginTop: 5,
     }}
     {...props}
   />
+)
+
+const PassIcon = () => (
+  <svg viewBox="0 0 38 32" fill="none">
+    <path d="M1 19.5L13 29.5L36 1" stroke="#11E365" strokeWidth="3" />
+  </svg>
+)
+
+const FailIcon = () => (
+  <svg viewBox="0 0 30 30" fill="none">
+    <path
+      d="M2 2L15 15M28 28L15 15M15 15L28 2M15 15L2 28"
+      stroke="#DA0505"
+      strokeWidth="3"
+    />
+  </svg>
 )
