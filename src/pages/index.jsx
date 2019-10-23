@@ -1,13 +1,11 @@
-/** @jsx jsx */
-import { useState } from "react"
-import ReactDOM from "react-dom"
-import { jsx, Global } from "@emotion/core"
+import React, { useState } from "react"
+import { Global } from "@emotion/core"
 import { ChromePicker } from "react-color"
 import {
   deltaE,
   perceptiveLuminance,
   wcagContrastRatio,
-} from "./colorFunctions"
+} from "lib/colorFunctions"
 
 const simpleRound = v => Math.round(100 * v) / 100
 
@@ -94,6 +92,8 @@ const App = () => {
   )
 }
 
+export default App
+
 const ContrastTest = ({ background, text }) => (
   <div css={{ marginBottom: 20 }}>
     <ContrastSwatch
@@ -175,6 +175,3 @@ const Label = props => (
     {...props}
   />
 )
-
-const rootElement = document.getElementById("root")
-ReactDOM.render(<App />, rootElement)

@@ -1,25 +1,49 @@
 {
-  "name": "perceptive-color-differences-for-accessibility-usability",
+  "name": "perceptive-color-metrics",
+  "description": "Utility web app that provides at-a-glance information about color contrast metrics with an emphasis on improving accessibility.",
   "version": "1.0.0",
-  "description": "",
-  "keywords": [],
-  "main": "src/index.js",
+  "author": "Corey Ward <corey.atx@gmail.com>",
+  "repository": "https://github.com/coreyward/perceptive-color-metrics",
+  "keywords": [
+    "color",
+    "accessibility",
+    "wcag",
+    "contrast",
+    "color contrast",
+    "readability"
+  ],
   "dependencies": {
-    "@emotion/core": "10.0.21",
-    "react": "16.8.6",
-    "react-color": "2.17.3",
-    "react-dom": "16.8.6",
-    "react-scripts": "3.0.1",
-    "typeface-roboto": "0.0.75"
+    "@emotion/core": "^10.0.21",
+    "gatsby": "^2.15.28",
+    "gatsby-plugin-emotion": "^4.1.9",
+    "gatsby-plugin-react-helmet": "^3.1.10",
+    "react": "^16.8.6",
+    "react-color": "^2.17.3",
+    "react-dom": "^16.8.6",
+    "react-helmet": "^5.2.1"
   },
   "devDependencies": {
-    "typescript": "3.3.3"
+    "@babel/core": "^7.4.4",
+    "@babel/plugin-proposal-optional-chaining": "^7.2.0",
+    "babel-eslint": "^10.0.1",
+    "babel-loader": "^8.0.5",
+    "babel-preset-gatsby": "^0.2.6",
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^4.2.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.17.2",
+    "eslint-plugin-node": "^8.0.1",
+    "eslint-plugin-prettier": "^3.0.1",
+    "eslint-plugin-promise": "^4.1.1",
+    "eslint-plugin-react": "^7.12.4",
+    "eslint-plugin-react-hooks": "^1.6.0",
+    "eslint-plugin-standard": "^4.0.0",
+    "prettier": "^1.17.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "build": "gatsby build",
+    "develop": "gatsby develop -p 8099",
+    "debug": "node --inspect-brk --no-lazy node_modules/gatsby/dist/bin/gatsby.js develop -p 8099"
   },
   "browserslist": [
     ">0.2%",
